@@ -16,6 +16,10 @@ func WavveGenerateM3U(host string) string {
 	if time.Now().Unix() >= wavveM3UExpTime {
 		WavveUpdateChannels()
 	}
+	tokenParam := ""
+	if ValidToken != "" {
+		tokenParam = "?token=" + ValidToken
+	}
 
 	var builder strings.Builder
 	builder.WriteString("#EXTM3U\n")
@@ -32,6 +36,7 @@ func WavveGenerateM3U(host string) string {
 		builder.WriteString("/wavve/")
 		builder.WriteString(ch.ContentID)
 		builder.WriteString(".m3u8")
+		builder.WriteString(tokenParam)
 		builder.WriteString("\n")
 	}
 	return builder.String()

@@ -148,7 +148,7 @@ func main() {
 
 	WavveUpdateChannels()
 
-	// fmt.Printf("Can't watch channels: ")
+	// fmt.Printf("Can't watch channels: \n")
 	// for i, ch := range WavveChannelslistResponse.CellTopList.CellList {
 	// 	//fmt.Printf("Index:%d ContentID:%s ChannelName:%s\n", i+1, ch.ContentID, ch.TitleList[0].Text)
 	// 	playUrl, _, _, _ := WavveGetLive(ch.ContentID)
