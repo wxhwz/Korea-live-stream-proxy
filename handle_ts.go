@@ -342,18 +342,19 @@ func (y *Wavve) HandleTsRequestCacheSF(c *gin.Context, tsUrl, cookie string) {
 		"User-Agent":      "poopV2",
 		"Accept-Encoding": "identity", // 禁用 gzip 压缩
 	}
-	rangeHeader := c.GetHeader("Range")
-	if rangeHeader != "" {
-		if !strings.HasPrefix(rangeHeader, "bytes=") || strings.Contains(rangeHeader, "..") {
-			LogError("Invalid Range header: ", rangeHeader)
-			c.String(http.StatusBadRequest, "Invalid Range header")
-			return
-		}
-		requestHeader["Range"] = rangeHeader
-	}
+	// rangeHeader := c.GetHeader("Range")
+	// if rangeHeader != "" {
+	// 	if !strings.HasPrefix(rangeHeader, "bytes=") || strings.Contains(rangeHeader, "..") {
+	// 		LogError("Invalid Range header: ", rangeHeader)
+	// 		c.String(http.StatusBadRequest, "Invalid Range header")
+	// 		return
+	// 	}
+	// 	requestHeader["Range"] = rangeHeader
+	// }
 
-	// 生成缓存键
-	cacheKey := generateTSKey(tsUrl, rangeHeader)
+	// // 生成缓存键
+	// cacheKey := generateTSKey(tsUrl, rangeHeader)
+	cacheKey := tsUrl
 
 	// 检查内存缓存
 	if cachedData, found := memCache.Get(cacheKey); found {
@@ -454,19 +455,20 @@ func (y *Wavve) HandleTsRequestSF(c *gin.Context, tsUrl, cookie string) {
 		"User-Agent":      "poopV2",
 		"Accept-Encoding": "identity",
 	}
-	rangeHeader := c.GetHeader("Range")
-	if rangeHeader != "" {
-		if !strings.HasPrefix(rangeHeader, "bytes=") || strings.Contains(rangeHeader, "..") {
-			LogError("Invalid Range header: ", rangeHeader)
-			c.String(http.StatusBadRequest, "Invalid Range header")
-			return
-		}
-		requestHeader["Range"] = rangeHeader
-	}
+	// rangeHeader := c.GetHeader("Range")
+	// if rangeHeader != "" {
+	// 	if !strings.HasPrefix(rangeHeader, "bytes=") || strings.Contains(rangeHeader, "..") {
+	// 		LogError("Invalid Range header: ", rangeHeader)
+	// 		c.String(http.StatusBadRequest, "Invalid Range header")
+	// 		return
+	// 	}
+	// 	requestHeader["Range"] = rangeHeader
+	// }
 
-	// 使用 singleflight 包装网络请求
-	// 以 tsUrl 和 rangeHeader 作为 key，确保相同请求被合并
-	key := tsUrl + "|" + rangeHeader
+	// // 使用 singleflight 包装网络请求
+	// // 以 tsUrl 和 rangeHeader 作为 key，确保相同请求被合并
+	// key := tsUrl + "|" + rangeHeader
+	key := tsUrl
 	y.addKey(key) // 记录键
 	result, err, shared := y.flight.Do(key, func() (interface{}, error) {
 		// 发送请求
